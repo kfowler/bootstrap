@@ -326,6 +326,25 @@ describe('Tooltip', () => {
       tooltip.show()
     })
 
+    it('should show a tooltip and destroy popper references', done => {
+      fixtureEl.innerHTML = '<a href="#" rel="tooltip" title="Another tooltip"/>'
+
+      const tooltipEl = fixtureEl.querySelector('a')
+      const tooltip = new Tooltip(tooltipEl)
+      const spyDestroy = jasmine.createSpy()
+
+      tooltip._popper = {
+        destroy: () => spyDestroy()
+      }
+
+      tooltipEl.addEventListener('shown.bs.tooltip', () => {
+        expect(spyDestroy).toHaveBeenCalled()
+        done()
+      })
+
+      tooltip.show()
+    })
+
     it('should show a tooltip on mobile', done => {
       fixtureEl.innerHTML = '<a href="#" rel="tooltip" title="Another tooltip"/>'
 

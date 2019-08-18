@@ -299,6 +299,10 @@ class Tooltip {
 
       EventHandler.trigger(this.element, this.constructor.Event.INSERTED)
 
+      if (this._popper) {
+        this._popper.destroy()
+      }
+
       this._popper = new Popper(this.element, tip, this._getPopperConfig(attachment))
 
       tip.classList.add(ClassName.SHOW)

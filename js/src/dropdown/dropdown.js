@@ -155,10 +155,6 @@ class Dropdown {
 
     // Disable totally Popper.js for Dropdown in Navbar
     if (!this._inNavbar) {
-      /**
-       * Check for Popper dependency
-       * Popper - https://popper.js.org
-       */
       if (typeof Popper === 'undefined') {
         throw new TypeError('Bootstrap\'s dropdowns require Popper.js (https://popper.js.org)')
       }
@@ -181,6 +177,10 @@ class Dropdown {
       // https://github.com/twbs/bootstrap/issues/24251
       if (this._config.boundary !== 'scrollParent') {
         parent.classList.add(ClassName.POSITION_STATIC)
+      }
+
+      if (this._popper) {
+        this._popper.destroy()
       }
 
       this._popper = new Popper(referenceElement, this._menu, this._getPopperConfig())

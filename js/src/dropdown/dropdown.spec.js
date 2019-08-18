@@ -147,6 +147,33 @@ describe('Dropdown', () => {
       dropdown.toggle()
     })
 
+    it('should toggle a dropdown and destroy popper references', done => {
+      fixtureEl.innerHTML = [
+        '<div class="dropdown">',
+        '  <button href="#" class="btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Dropdown</button>',
+        '  <div class="dropdown-menu">',
+        '    <a class="dropdown-item" href="#">Secondary link</a>',
+        '  </div>',
+        '</div>'
+      ].join('')
+
+      const btnDropdown = fixtureEl.querySelector('[data-toggle="dropdown"]')
+      const dropdownEl = fixtureEl.querySelector('.dropdown')
+      const dropdown = new Dropdown(btnDropdown)
+      const spyDestroy = jasmine.createSpy()
+
+      dropdown._popper = {
+        destroy: () => spyDestroy()
+      }
+
+      dropdownEl.addEventListener('shown.bs.dropdown', () => {
+        expect(spyDestroy).toHaveBeenCalled()
+        done()
+      })
+
+      dropdown.toggle()
+    })
+
     it('should toggle a dropdown and add/remove event listener on mobile', done => {
       fixtureEl.innerHTML = [
         '<div class="dropdown">',
